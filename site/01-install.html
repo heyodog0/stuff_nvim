@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Install — stuff_nvim</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <p class="brand">stuff_nvim</p>
+    <p class="tagline">Neovim · cmux · uv</p>
+    <nav>
+      <a href="index.html" >Overview</a>
+      <a href="01-install.html" class="active"><span class="num">01</span>Install</a>
+      <a href="02-nvim-setup.html" ><span class="num">02</span>Neovim setup</a>
+      <a href="03-cmux-setup.html" ><span class="num">03</span>cmux setup</a>
+      <a href="04-running-code-with-uv.html" ><span class="num">04</span>Running code</a>
+    </nav>
+  </aside>
+  <main>
+<h1 id="01--install-everything">01 — Install everything</h1>
+<p>Goal: take a fresh macOS machine and end up with Neovim, cmux, and uv
+installed. Everything here is run in a terminal (the built-in
+<strong>Terminal.app</strong> is fine until cmux is installed).</p>
+<h2 id="tldr--one-command">TL;DR — one command</h2>
+<p>If you just want everything set up from the get-go, run the bundled
+script. It's idempotent (safe to re-run) and skips anything already
+installed:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> setup.sh</span></code></pre></div>
+<p>Or straight from the web without cloning first:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://raw.githubusercontent.com/<span class="op">&lt;</span>you<span class="op">&gt;</span>/stuff_nvim/main/setup.sh <span class="kw">|</span> <span class="fu">bash</span></span></code></pre></div>
+<p>It installs Homebrew, Neovim, cmux, and uv, then clones my Neovim
+config to <code>~/.config/nvim</code>. The rest of this page explains
+each step if you'd rather do it by hand or something goes wrong.</p>
+<h2 id="1-homebrew-the-package-manager">1. Homebrew (the package
+manager)</h2>
+<p>Homebrew is how I install most things on macOS. Check if it's already
+there:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> <span class="at">--version</span></span></code></pre></div>
+<p>If that errors, install it:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/bin/bash</span> <span class="at">-c</span> <span class="st">&quot;</span><span class="va">$(</span><span class="ex">curl</span> <span class="at">-fsSL</span> https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span class="va">)</span><span class="st">&quot;</span></span></code></pre></div>
+<p>After it finishes, follow the printed instructions to add
+<code>brew</code> to your <code>PATH</code> (on Apple Silicon it lives
+at <code>/opt/homebrew/bin/brew</code>).</p>
+<h2 id="2-neovim-the-editor">2. Neovim (the editor)</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install neovim</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">nvim</span> <span class="at">--version</span>   <span class="co"># expect v0.12.0 or newer</span></span></code></pre></div>
+<blockquote>
+<p>My config targets Neovim <strong>0.12+</strong>. Older versions may
+break plugins.</p>
+</blockquote>
+<h2 id="3-cmux-the-terminal-app">3. cmux (the terminal app)</h2>
+<p>cmux is a desktop app, so install it as a cask:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install <span class="at">--cask</span> cmux</span></code></pre></div>
+<p>It installs to <code>/Applications/cmux.app</code>. Launch it once so
+it creates its config directory at <code>~/.config/cmux</code>.</p>
+<h2 id="4-uv-the-python-runner">4. uv (the Python runner)</h2>
+<p>uv replaces <code>python</code>, <code>pip</code>, and
+<code>virtualenv</code> for day-to-day work. It manages Python versions
+<em>and</em> runs scripts.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-LsSf</span> https://astral.sh/uv/install.sh <span class="kw">|</span> <span class="fu">sh</span></span></code></pre></div>
+<p>This installs to <code>~/.local/bin/uv</code>. Restart your shell,
+then verify:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> <span class="at">--version</span>    <span class="co"># expect 0.6.5 or newer</span></span></code></pre></div>
+<p>uv will download a Python interpreter for you the first time you need
+one — you don't have to install Python separately.</p>
+<h2 id="5-my-neovim-config">5. My Neovim config</h2>
+<p>The editor is configured via a git repo at
+<code>~/.config/nvim</code>. To get my exact setup on a new machine:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/heyodog0/nvim.git ~/.config/nvim</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">nvim</span></span></code></pre></div>
+<p>On first launch, <code>init.lua</code> bootstraps the
+<strong>lazy.nvim</strong> plugin manager and installs every plugin
+automatically. Let it finish, then quit and reopen.</p>
+<blockquote>
+<p><code>~/.config/nvim</code> is its own git repository on this machine
+— that's where the config is version-controlled, not in this
+<code>stuff_nvim</code> directory.</p>
+</blockquote>
+<h2 id="verify-the-whole-stack">Verify the whole stack</h2>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nvim</span> <span class="at">--version</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-1</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">cmux</span> <span class="at">--version</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> <span class="at">--version</span></span></code></pre></div>
+<p>If all three print versions, you're ready for <a
+href="./04-running-code-with-uv.html">04 — Running code with uv</a>.</p>
+  </main>
+</body>
+</html>

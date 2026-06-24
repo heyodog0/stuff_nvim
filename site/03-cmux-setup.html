@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>cmux setup — stuff_nvim</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <p class="brand">stuff_nvim</p>
+    <p class="tagline">Neovim · cmux · uv</p>
+    <nav>
+      <a href="index.html" >Overview</a>
+      <a href="01-install.html" ><span class="num">01</span>Install</a>
+      <a href="02-nvim-setup.html" ><span class="num">02</span>Neovim setup</a>
+      <a href="03-cmux-setup.html" class="active"><span class="num">03</span>cmux setup</a>
+      <a href="04-running-code-with-uv.html" ><span class="num">04</span>Running code</a>
+    </nav>
+  </aside>
+  <main>
+<h1 id="03--cmux-setup">03 — cmux setup</h1>
+<p><a href="https://github.com/manaflow-ai/cmux">cmux</a> is the
+terminal app I run Neovim inside. It's a desktop app (not a CLI
+multiplexer like tmux), so it has a GUI and a JSON config file.</p>
+<h2 id="where-the-config-lives">Where the config lives</h2>
+<pre><code>~/.config/cmux
+├── cmux.json          # active config
+└── settings.json      # mirror of cmux.json (legacy filename) — keep in sync</code></pre>
+<p>Both files are kept identical. cmux reads them as
+<strong>JSONC</strong> (JSON with comments). After editing, reload with
+<code>cmd+shift+,</code> (reloadConfiguration) or restart the app. The
+original templates are backed up as <code>*.bak.&lt;date&gt;</code>.</p>
+<h2 id="my-tuning-section-by-section">My tuning, section by section</h2>
+<p>The config is deliberately trimmed for a stable, private, low-memory
+setup.</p>
+<h3 id="app--stable-layout--privacy"><code>app</code> — stable layout +
+privacy</h3>
+<pre class="jsonc"><code>&quot;app&quot;: {
+  &quot;iMessageMode&quot;: false,
+  &quot;reorderOnNotification&quot;: false,   // don&#39;t shuffle tabs when something pings
+  &quot;sendAnonymousTelemetry&quot;: false
+}</code></pre>
+<h3 id="browser--disable-the-embedded-browser"><code>browser</code> —
+disable the embedded browser</h3>
+<p>Stops cmux from spawning WebKit processes for links:</p>
+<pre class="jsonc"><code>&quot;browser&quot;: {
+  &quot;openTerminalLinksInCmuxBrowser&quot;: false,
+  &quot;interceptTerminalOpenCommandInCmuxBrowser&quot;: false,
+  &quot;discardHiddenWebViews&quot;: true,
+  &quot;hiddenWebViewDiscardDelaySeconds&quot;: 30
+}</code></pre>
+<p>Links open in my real browser instead.</p>
+<h3 id="sidebar--route-links-out--trim-noise"><code>sidebar</code> —
+route links out + trim noise</h3>
+<pre class="jsonc"><code>&quot;sidebar&quot;: {
+  &quot;openPortLinksInCmuxBrowser&quot;: false,
+  &quot;openPullRequestLinksInCmuxBrowser&quot;: false,
+  &quot;showLog&quot;: false,
+  &quot;showProgress&quot;: false,
+  &quot;showSSH&quot;: false,
+  &quot;showCustomMetadata&quot;: false
+}</code></pre>
+<p>Kept: branch directory, pull requests, ports, notification
+message.</p>
+<h3
+id="terminalagenthibernation--free-ram-from-idle-agents"><code>terminal.agentHibernation</code>
+— free RAM from idle agents</h3>
+<p>cmux has no scrollback cap, so hibernation is the real memory
+lever:</p>
+<pre class="jsonc"><code>&quot;terminal&quot;: {
+  &quot;agentHibernation&quot;: {
+    &quot;enabled&quot;: true,
+    &quot;idleSeconds&quot;: 30,       // hibernate an agent after 30s idle
+    &quot;maxLiveTerminals&quot;: 4    // keep at most 4 live at once
+  }
+}</code></pre>
+<h2 id="if-you-edit-the-config">If you edit the config</h2>
+<ol type="1">
+<li>Edit <code>cmux.json</code>.</li>
+<li>Copy the same change into <code>settings.json</code> so they stay in
+sync.</li>
+<li>Press <code>cmd+shift+,</code> in cmux to reload (or restart the
+app).</li>
+</ol>
+<p>The JSON schema (<code>$schema</code> at the top of each file) gives
+autocomplete and validation if you open these in Neovim with the LSP
+running.</p>
+  </main>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Running code with uv — stuff_nvim</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <p class="brand">stuff_nvim</p>
+    <p class="tagline">Neovim · cmux · uv</p>
+    <nav>
+      <a href="index.html" >Overview</a>
+      <a href="01-install.html" ><span class="num">01</span>Install</a>
+      <a href="02-nvim-setup.html" ><span class="num">02</span>Neovim setup</a>
+      <a href="03-cmux-setup.html" ><span class="num">03</span>cmux setup</a>
+      <a href="04-running-code-with-uv.html" class="active"><span class="num">04</span>Running code</a>
+    </nav>
+  </aside>
+  <main>
+<h1 id="04--running-code-with-uv">04 — Running code with uv</h1>
+<p>This is the core loop: write a Python file and run it. We do it two
+ways — first in the plain terminal so you understand what's happening,
+then from inside Neovim with one keypress.</p>
+<p>There's a ready-made file to practice on: <a
+href="./examples/hello.py"><code>examples/hello.py</code></a>.</p>
+<hr />
+<h2 id="part-a--run-it-in-the-terminal">Part A — run it in the
+terminal</h2>
+<p>Open a terminal in cmux and <code>cd</code> into this directory:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/code/lab/stuff_nvim</span></code></pre></div>
+<h3 id="1-look-at-the-file">1. Look at the file</h3>
+<p><code>examples/hello.py</code> contains:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;hello world&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    main()</span></code></pre></div>
+<h3 id="2-run-it-with-uv">2. Run it with uv</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run examples/hello.py</span></code></pre></div>
+<p>You should see:</p>
+<pre><code>hello world</code></pre>
+<p>That's it. <code>uv run &lt;file&gt;</code> figures out the Python
+interpreter (downloading one the first time if needed), then executes
+the file. No virtualenv to activate, no <code>python3</code> vs
+<code>python</code> confusion.</p>
+<h3 id="3-make-your-own-and-run-it">3. Make your own and run it</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&#39;print(&quot;hi from my own file&quot;)&#39;</span> <span class="op">&gt;</span> scratch.py</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run scratch.py</span></code></pre></div>
+<h3 id="what-uv-run-actually-does">What <code>uv run</code> actually
+does</h3>
+<ul>
+<li>Finds (or downloads) a Python interpreter.</li>
+<li>If the project has a <code>pyproject.toml</code>/lockfile, it
+installs those deps into a managed environment first.</li>
+<li>Runs your file in that environment.</li>
+</ul>
+<p>For a standalone script that needs a package, you can declare it
+inline and uv will fetch it on the fly:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run <span class="at">--with</span> requests examples/hello.py</span></code></pre></div>
+<hr />
+<h2 id="part-b--run-it-from-inside-neovim">Part B — run it from inside
+Neovim</h2>
+<p>This is what <code>&lt;leader&gt;ur</code> is for. (Leader =
+<strong>Space</strong>.)</p>
+<h3 id="1-open-the-file">1. Open the file</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nvim</span> examples/hello.py</span></code></pre></div>
+<h3 id="2-press-the-runner-keymap">2. Press the runner keymap</h3>
+<p>In normal mode, press:</p>
+<pre><code>&lt;space&gt;ur</code></pre>
+<p>That runs this mapping from
+<code>~/.config/nvim/lua/config/keymaps.lua</code>:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode lua"><code class="sourceCode lua"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="va">vim</span><span class="op">.</span><span class="va">keymap</span><span class="op">.</span>set<span class="op">(</span><span class="st">&quot;n&quot;</span><span class="op">,</span> <span class="st">&quot;&lt;leader&gt;ur&quot;</span><span class="op">,</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;:belowright split | terminal uv run %&lt;CR&gt;i&quot;</span><span class="op">,</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">{</span> <span class="va">desc</span> <span class="op">=</span> <span class="st">&quot;Run current file with uv&quot;</span> <span class="op">})</span></span></code></pre></div>
+<p>Step by step, it:</p>
+<ol type="1">
+<li><code>belowright split</code> — opens a new window below the current
+one.</li>
+<li><code>terminal uv run %</code> — runs <code>uv run</code> on
+<code>%</code> (the current file's path) in that split.</li>
+<li><code>&lt;CR&gt;i</code> — confirms and drops you into terminal
+insert mode so you can interact.</li>
+</ol>
+<p>You'll see <code>hello world</code> print in the bottom split.</p>
+<h3 id="3-close-the-output-split">3. Close the output split</h3>
+<p>When you're done reading the output:</p>
+<ul>
+<li>Press <code>&lt;space&gt;j</code> to toggle the terminal split
+closed (and back open), <strong>or</strong></li>
+<li><code>&lt;space&gt;q</code> to close the current split.</li>
+</ul>
+<blockquote>
+<p>Note: <code>&lt;leader&gt;q</code> is mapped to close-split in normal
+usage, and also to "show diagnostics" in LSP contexts — see
+<code>KEYBINDINGS.txt</code>. To just dismiss a terminal split,
+<code>&lt;leader&gt;j</code> (toggle terminal) is the cleanest.</p>
+</blockquote>
+<h3 id="the-terminal-toggle-leaderj">The terminal toggle
+(<code>&lt;leader&gt;j</code>)</h3>
+<p>Independent of the runner, <code>&lt;space&gt;j</code> toggles a
+persistent terminal split. It reuses one terminal buffer, so your shell
+history stays put. Handy for running <code>uv run</code> manually, git
+commands, etc., without leaving the editor.</p>
+<hr />
+<h2 id="part-c--a-real-example-linear-regression">Part C — a real
+example: linear regression</h2>
+<p>Printing "hello world" proves the loop works. Here's something you'd
+actually run: a classic <strong>simple linear regression</strong>, the
+workhorse of intro statistics.</p>
+<p>The file is <a
+href="./examples/regression.py"><code>examples/regression.py</code></a>.
+It uses scikit-learn's built-in <strong>diabetes</strong> dataset and
+fits one predictor — <strong>BMI</strong> — against a measure of disease
+progression. One predictor keeps it readable: you can interpret the
+slope directly.</p>
+<h3 id="the-neat-part-uv-installs-the-dependencies-for-you">The neat
+part: uv installs the dependencies for you</h3>
+<p>This script needs <code>scikit-learn</code> and <code>numpy</code>.
+You don't pip-install anything — the file <em>declares its own
+dependencies</em> in a header block that uv reads:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># /// script</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># requires-python = &quot;&gt;=3.11&quot;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># dependencies = [&quot;scikit-learn&quot;, &quot;numpy&quot;]</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ///</span></span></code></pre></div>
+<p>That's the <a href="https://peps.python.org/pep-0723/">PEP 723</a>
+inline-script format. uv sees it, builds a temporary environment with
+those packages, and runs the file.</p>
+<h3 id="run-it">Run it</h3>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run examples/regression.py</span></code></pre></div>
+<p>The first run downloads the packages (a few seconds); after that
+they're cached. You'll see:</p>
+<pre><code>Fitted line:  y = 152.1 + 949.4 * bmi
+R²         :  0.344
+
+Interpretation:
+  • Each +1 standardized unit of BMI is associated with about
+    949 more units of disease progression.
+  • BMI alone explains 34.4% of the variation in the outcome —
+    real, but far from the whole story (that&#39;s why models add features).</code></pre>
+<h3 id="what-the-code-does-step-by-step">What the code does, step by
+step</h3>
+<ol type="1">
+<li><strong>Load</strong> the dataset (<code>load_diabetes</code>) and
+pick the BMI column.</li>
+<li><strong>Fit</strong> <code>LinearRegression().fit(X, y)</code> —
+finds the line <code>y = intercept + slope·bmi</code>.</li>
+<li><strong>Score</strong> it with R² — the fraction of the outcome's
+variation the line explains.</li>
+<li><strong>Interpret</strong> the slope and R² in plain language.</li>
+</ol>
+<h3 id="reading-the-result">Reading the result</h3>
+<ul>
+<li><strong>Slope (949.4):</strong> the line's steepness. Because
+sklearn's features are standardized (mean 0), this is "per standardized
+unit of BMI," not per raw BMI point — a detail worth knowing so you
+don't over-claim.</li>
+<li><strong>R² (0.344):</strong> BMI alone explains ~34% of the
+variation. That's a genuine signal but leaves most unexplained — the
+natural motivation for adding more predictors (multiple
+regression).</li>
+</ul>
+<p>You can run this from inside Neovim the same way as any file: open it
+and press <code>&lt;space&gt;ur</code>.</p>
+<hr />
+<h2 id="cheat-sheet">Cheat sheet</h2>
+<table>
+<thead>
+<tr>
+<th>What</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Run a file in the terminal</td>
+<td><code>uv run path/to/file.py</code></td>
+</tr>
+<tr>
+<td>Run a file + a one-off package</td>
+<td><code>uv run --with &lt;pkg&gt; file.py</code></td>
+</tr>
+<tr>
+<td>Run a script with inline deps</td>
+<td><code>uv run examples/regression.py</code> (deps in the
+<code># /// script</code> header)</td>
+</tr>
+<tr>
+<td>Run the <strong>current</strong> file from Neovim</td>
+<td><code>&lt;space&gt;ur</code></td>
+</tr>
+<tr>
+<td>Toggle a terminal inside Neovim</td>
+<td><code>&lt;space&gt;j</code></td>
+</tr>
+<tr>
+<td>Run a cargo (Rust) project</td>
+<td><code>&lt;space&gt;c</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="common-gotchas">Common gotchas</h2>
+<ul>
+<li><strong><code>uv: command not found</code></strong> — restart your
+shell after installing uv, or check that <code>~/.local/bin</code> is on
+your <code>PATH</code>.</li>
+<li><strong><code>&lt;leader&gt;ur</code> does nothing</strong> — make
+sure you're in <em>normal</em> mode (press <code>Esc</code> first) and
+that the buffer is a saved file (<code>%</code> needs a real path).</li>
+<li><strong>Wrong Python version</strong> — pin one per project with
+<code>uv python pin 3.13</code>, or add a <code>pyproject.toml</code>
+with a <code>requires-python</code> field.</li>
+</ul>
+  </main>
+</body>
+</html>

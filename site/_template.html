@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>$title$ — stuff_nvim</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <p class="brand">stuff_nvim</p>
+    <p class="tagline">Neovim · cmux · uv</p>
+    <nav>
+      <a href="index.html" $if(a_home)$class="active"$endif$>Overview</a>
+      <a href="01-install.html" $if(a_install)$class="active"$endif$><span class="num">01</span>Install</a>
+      <a href="02-nvim-setup.html" $if(a_nvim)$class="active"$endif$><span class="num">02</span>Neovim setup</a>
+      <a href="03-cmux-setup.html" $if(a_cmux)$class="active"$endif$><span class="num">03</span>cmux setup</a>
+      <a href="04-running-code-with-uv.html" $if(a_run)$class="active"$endif$><span class="num">04</span>Running code</a>
+    </nav>
+  </aside>
+  <main>
+$body$
+  </main>
+</body>
+</html>

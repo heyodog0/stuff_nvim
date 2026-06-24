@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Overview — stuff_nvim</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <p class="brand">stuff_nvim</p>
+    <p class="tagline">Neovim · cmux · uv</p>
+    <nav>
+      <a href="index.html" class="active">Overview</a>
+      <a href="01-install.html" ><span class="num">01</span>Install</a>
+      <a href="02-nvim-setup.html" ><span class="num">02</span>Neovim setup</a>
+      <a href="03-cmux-setup.html" ><span class="num">03</span>cmux setup</a>
+      <a href="04-running-code-with-uv.html" ><span class="num">04</span>Running code</a>
+    </nav>
+  </aside>
+  <main>
+<h1 id="stuff_nvim--my-terminal-coding-setup">stuff_nvim — my terminal
+coding setup</h1>
+<p>A one-stop shop for my coding environment: <strong>Neovim</strong>
+for editing, <strong>cmux</strong> as the terminal, and
+<strong>uv</strong> for running Python code. Start at the top and work
+down.</p>
+<p>If you're setting this up on a fresh machine, read in order. If you
+just want to remember how to run a file, jump to <a
+href="./04-running-code-with-uv.html">04 — Running code with uv</a>.</p>
+<h2 id="the-pieces">The pieces</h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it is</th>
+<th>My version (2026-06-23)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Neovim</td>
+<td>The text editor</td>
+<td>0.12.0</td>
+</tr>
+<tr>
+<td>cmux</td>
+<td>The terminal app (multiplexer)</td>
+<td>0.64.16</td>
+</tr>
+<tr>
+<td>uv</td>
+<td>Python package + script runner</td>
+<td>0.6.5</td>
+</tr>
+<tr>
+<td>Homebrew</td>
+<td>macOS package manager I install with</td>
+<td>6.0.2</td>
+</tr>
+</tbody>
+</table>
+<h2 id="guides">Guides</h2>
+<ol type="1">
+<li><strong><a href="./01-install.html">Install everything</a></strong> —
+get Homebrew, Neovim, cmux, and uv onto a fresh Mac.</li>
+<li><strong><a href="./02-nvim-setup.html">Neovim setup</a></strong> —
+what lives in <code>~/.config/nvim</code> and how it's wired.</li>
+<li><strong><a href="./03-cmux-setup.html">cmux setup</a></strong> — my
+<code>~/.config/cmux</code> tuning.</li>
+<li><strong><a href="./04-running-code-with-uv.html">Running code with
+uv</a></strong> — hello world in the terminal, then from inside
+Neovim.</li>
+</ol>
+<h2 id="the-30-second-version">The 30-second version</h2>
+<pre><code># install everything (once) — see 01-install.md
+bash setup.sh
+
+# write a file
+echo &#39;print(&quot;hello world&quot;)&#39; &gt; hello.py
+
+# run it in the terminal
+uv run hello.py
+
+# run it from inside Neovim
+#   open the file, then press:  &lt;space&gt;ur</code></pre>
+<p>That's the whole loop. The rest of these docs explain each step.</p>
+<hr />
+<p><em>Building/hosting this as a site? See <a
+href="./HOSTING.html">HOSTING.md</a>.</em></p>
+  </main>
+</body>
+</html>
