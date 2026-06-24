@@ -16,7 +16,7 @@ bash setup.sh
 Or straight from the web without cloning first:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/<you>/stuff_nvim/main/setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/heyodog0/stuff_nvim/master/setup.sh | bash
 ```
 
 It installs Homebrew, Neovim, cmux, and uv, then clones my Neovim config to

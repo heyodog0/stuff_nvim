@@ -29,7 +29,7 @@ script. It's idempotent (safe to re-run) and skips anything already
 installed:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> setup.sh</span></code></pre></div>
 <p>Or straight from the web without cloning first:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://raw.githubusercontent.com/<span class="op">&lt;</span>you<span class="op">&gt;</span>/stuff_nvim/main/setup.sh <span class="kw">|</span> <span class="fu">bash</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://raw.githubusercontent.com/heyodog0/stuff_nvim/master/setup.sh <span class="kw">|</span> <span class="fu">bash</span></span></code></pre></div>
 <p>It installs Homebrew, Neovim, cmux, and uv, then clones my Neovim
 config to <code>~/.config/nvim</code>. The rest of this page explains
 each step if you'd rather do it by hand or something goes wrong.</p>
